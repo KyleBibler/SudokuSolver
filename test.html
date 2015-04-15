@@ -6,11 +6,16 @@
 </head>
 <body>
 <p id="test"></p>
-<script src="linkedList.js"></script>
+<script src="sparseMatrix.js"></script>
 <script>
-    var myArray = [1, 2, 3, 4, 5];
-    var myList = new LinkedList(myArray);
+    var myMatrix = [[0, 1, 0, 1, 1],
+                    [1, 1, 0, 1, 1],
+                    [0, 1, 1, 1, 0],
+                    [0, 0, 0, 0, 0],
+                    [1, 0, 1, 0, 1]];
 
+    var sparseMatrix = new SparseMatrix();
+    sparseMatrix.createLinks(myMatrix);
 
 </script>
 </body>
