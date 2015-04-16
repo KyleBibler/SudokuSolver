@@ -48,15 +48,15 @@ var SparseMatrix = function() {
 
 SparseMatrix.prototype.chooseCol = function() {
     var col = this.head,
-        maxSize = 0,
-        maxCol = null;
-    while(col.right != this.head) {
+        minSize = col.right.size+1,
+        minCol = null;
+    while(col.right !== this.head) {
         col = col.right;
-        if(col.size > maxSize) {
-            maxCol = col;
+        if(col.size <= minSize) {
+            minCol = col;
         }
     }
-    return maxCol;
+    return minCol;
 };
 
 SparseMatrix.prototype.createLinks = function(matrix) {

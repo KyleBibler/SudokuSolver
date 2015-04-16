@@ -7,15 +7,17 @@
 <body>
 <p id="test"></p>
 <script src="sparseMatrix.js"></script>
+<script src="dancingLinks.js"></script>
 <script>
     var myMatrix = [[0, 1, 0, 1, 1],
                     [1, 1, 0, 1, 1],
                     [0, 1, 1, 1, 0],
-                    [0, 0, 0, 0, 0],
+                    [0, 1, 0, 1, 0],
                     [1, 0, 1, 0, 1]];
+    DLX.matrix.createLinks(myMatrix);
 
-    var sparseMatrix = new SparseMatrix();
-    sparseMatrix.createLinks(myMatrix);
+
+
 
 </script>
 </body>
