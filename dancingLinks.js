@@ -1,7 +1,7 @@
 /**
  * Created by Kyle on 4/14/2015.
  */
-
+var solutionSets = [];
 
 var DLX = function() {
 
@@ -61,7 +61,13 @@ var DLX = function() {
         search: function(depth) {
             var matrixHead = this.matrix.head;
             if(matrixHead.right === matrixHead) {
-                return this.solutionSet; //Return solution rows
+                //return this.solutionSet; //Return solution rows
+                var mySolution = [], i = 0;
+                for(i; i < depth; i++) {
+                    mySolution[i] = this.solutionSet[i];
+                }
+                solutionSets.push(mySolution);
+                return;
             }
             var col = this.matrix.chooseCol(),
                 rowNode = col.down,
@@ -69,16 +75,12 @@ var DLX = function() {
             cover(col);
             while(rowNode !== col) {
                 rowNeighbor = rowNode.right;
-                this.solutionSet[depth] = getRowNodes(rowNode);
+                this.solutionSet[depth] = rowNode.row;
                 console.log("STORING AT DEPTH: " + depth);
                 while(rowNeighbor !== rowNode) {
                     console.log(rowNeighbor);
                     cover(rowNeighbor.col);
-                    if(getColNodesSize0(this.matrix.head)) {
-                        console.log("COVERING RESULTED IN MATRIX COLUMN OF SIZE ZERO STILL ATTACHED");
-                    }
                     rowNeighbor = rowNeighbor.right;
-
                 }
                 this.search(depth+1);
                 rowNeighbor = rowNode.left;

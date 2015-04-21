@@ -9,11 +9,15 @@
 <script src="sparseMatrix.js"></script>
 <script src="dancingLinks.js"></script>
 <script>
-    var myMatrix = [[0, 1, 0, 1, 1],
-                    [1, 1, 0, 1, 1],
-                    [0, 1, 1, 1, 0],
-                    [0, 1, 0, 1, 0],
-                    [1, 0, 1, 0, 1]];
+    var mySmallerMatrix = [[1, 1],[1, 1]];
+    var mySmallMatrix = [[0, 0, 1],
+                         [1, 1, 0],
+                         [1, 1, 0]];
+    var myMatrix = [[1, 1, 1, 0, 1],
+                    [0, 0, 0, 1, 0],
+                    [0, 0, 0, 1, 1],
+                    [0, 1, 1, 0, 0],
+                    [1, 0, 0, 1, 1]];
     DLX.matrix.createLinks(myMatrix);
 
 

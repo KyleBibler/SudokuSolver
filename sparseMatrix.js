@@ -38,23 +38,46 @@ Head.prototype.detach = function() {
 };
 
 Head.prototype.attach = function() {
-    this.left = this;
-    this.right = this;
+    this.left.right = this;
+    this.right.left = this;
 };
 
 var SparseMatrix = function() {
     this.head = new Head(0);
 };
 
-SparseMatrix.prototype.chooseCol = function() {
-    var col = this.head,
-        minSize = col.right.size+1,
-        minCol = null;
-    while(col.right !== this.head) {
-        col = col.right;
-        if(col.size <= minSize) {
-            minCol = col;
+SparseMatrix.prototype.toString = function() {
+    var result = '',
+        header = this.head.right;
+        while(header !== this.head) {
+            result += '\t' + header.col + '\t';
         }
+        result += '\n';
+        header = this.head.right;
+        var node = header.down;
+        while(node != header) {
+            result += node.left.col.col + '--';
+            if(node.left.right === node) {
+                result += '>';
+            }
+            result += 'N';
+            if(node.right.left === node) {
+                result += '<';
+            }
+            result += '--';
+        }
+};
+
+SparseMatrix.prototype.chooseCol = function() {
+    var col = this.head.right,
+        minSize = col.size+1,
+        minCol = null;
+    while(col !== this.head) {
+        if(col.size < minSize) {
+            minCol = col;
+            minSize = col.size;
+        }
+        col = col.right;
     }
     return minCol;
 };
