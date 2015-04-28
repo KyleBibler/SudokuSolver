@@ -76,9 +76,7 @@ var DLX = function() {
             while(rowNode !== col) {
                 rowNeighbor = rowNode.right;
                 this.solutionSet[depth] = rowNode.row;
-                console.log("STORING AT DEPTH: " + depth);
                 while(rowNeighbor !== rowNode) {
-                    console.log(rowNeighbor);
                     cover(rowNeighbor.col);
                     rowNeighbor = rowNeighbor.right;
                 }

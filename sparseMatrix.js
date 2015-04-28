@@ -84,41 +84,73 @@ SparseMatrix.prototype.chooseCol = function() {
 
 SparseMatrix.prototype.createLinks = function(matrix) {
     var headItr = this.head,
-        newHead = null;
-    for(var i = 0; i < matrix[0].length; i++) {
+        newHead = null,
+        colLength = Object.keys(matrix).length,
+        rowLength = 0;
+    for(var key in matrix) {
+        if (matrix.hasOwnProperty(key)) {
+            rowLength = matrix[key].length;
+            break;
+        }
+    }
+
+    for(var i = 0; i < rowLength.length; i++) {
         newHead = new Head(i+1);
         headItr.right = newHead;
         newHead.left = headItr;
         headItr = newHead;
     }
+
+
     headItr.right = this.head;
     this.head.left = headItr;
 
     var colHead = this.head,
         nodeItr = null,
         newNode = null,
-        j,
         rowNodes = [];
+    i = 0;
 
-    for(j = 0; j < matrix[0].length; j++) {
-        colHead = colHead.right;
-        nodeItr = colHead;
-        for(i = 0; i < matrix.length; i++) {
-            if(!rowNodes[i]) {
-                rowNodes[i] = [];
-            }
-            if(matrix[i][j] === 1) {
-                newNode = new Node(i+1, colHead);
-                colHead.size++;
-                rowNodes[i].push(newNode);
-                nodeItr.down = newNode;
-                newNode.up = nodeItr;
-                nodeItr = newNode;
+    for(var j = 0; j < rowLength; j++) {
+        for(key in matrix) {
+            if (matrix.hasOwnProperty(key)) {
+                if(!rowNodes[i]) {
+                    rowNodes[i] = [];
+                }
+                if(matrix[key][j] !== "") {
+                    newNode = new Node(i+1, colHead);
+                    colHead.size++;
+                    rowNodes[i].push(newNode);
+                    nodeItr.down = newNode;
+                    newNode.up = nodeItr;
+                    nodeItr = newNode;
+                }
+                i++;
             }
         }
         nodeItr.down = colHead;
         colHead.up = nodeItr;
     }
+
+    //for(j = 0; j < matrix[0].length; j++) {
+    //    colHead = colHead.right;
+    //    nodeItr = colHead;
+    //    for(i = 0; i < matrix.length; i++) {
+    //        if(!rowNodes[i]) {
+    //            rowNodes[i] = [];
+    //        }
+    //        if(matrix[i][j] !== "") {
+    //            newNode = new Node(i+1, colHead);
+    //            colHead.size++;
+    //            rowNodes[i].push(newNode);
+    //            nodeItr.down = newNode;
+    //            newNode.up = nodeItr;
+    //            nodeItr = newNode;
+    //        }
+    //    }
+    //    nodeItr.down = colHead;
+    //    colHead.up = nodeItr;
+    //}
 
     var nextNode = null;
     for(i=0; i < rowNodes.length; i++) {
