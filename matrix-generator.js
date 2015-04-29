@@ -1,4 +1,4 @@
-var finalMatrix;
+var finalMatrix = null;
 
 //Generate solution matrix for sudoku
 function generateMatrix (n) {
@@ -50,8 +50,10 @@ function readFile(files) {
 		seedData = parseInput(reader.result);
 
 		choiceMatrix = generateMatrix(seedData.n);
+		//DLX.matrix.createLinks(choiceMatrix);
 
-		finalMatrix = reduceMatrix(seedData, choiceMatrix);		
+		finalMatrix = reduceMatrix(seedData, choiceMatrix);
+		DLX.matrix.createLinks(finalMatrix);
 	};
 
 }

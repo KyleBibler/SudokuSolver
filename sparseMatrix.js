@@ -125,19 +125,28 @@ SparseMatrix.prototype.createLinks = function(matrix) {
 
     for(i=0; i < colNodes.length; i++) {
         colHead = colHead.right;
-        if(colNodes[i].length === 0) {
-            continue;
-        }
         nodeItr = colHead;
-        for(j = 0; j < colNodes[i].length; j++) {
-            nextNode = colNodes[i][j];
-            nextNode.up = nodeItr;
-            nodeItr.down = nextNode;
-            nodeItr = nextNode;
-            colHead.size++;
+        if(typeof colNodes[i] !== 'undefined' && colNodes[i].length !== 0) {
+            for(j = 0; j < colNodes[i].length; j++) {
+                nextNode = colNodes[i][j];
+                nextNode.up = nodeItr;
+                nodeItr.down = nextNode;
+                nodeItr = nextNode;
+                colHead.size++;
+            }
+            colHead.up = nodeItr;
+            nodeItr.down = colHead;
+        } else {
+            colHead.detach();
         }
-        colHead.up = nodeItr;
-        nodeItr.down = colHead;
+
+    }
+    colHead = this.head.right;
+    i = 1;
+    while(colHead !== this.head) {
+        colHead.col = i;
+        colHead = colHead.right;
+        i++;
     }
 };
 
