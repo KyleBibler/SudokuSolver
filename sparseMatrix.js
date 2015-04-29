@@ -102,70 +102,53 @@ SparseMatrix.prototype.createLinks = function(matrix) {
     }
 
 
-    headItr.right = this.head;
-    this.head.left = headItr;
+    headItr = this.head.right;
 
-    var colHead = this.head,
-        nodeItr = null,
-        newNode = null,
-        rowNodes = [];
-    i = 0;
-
-    for(var j = 0; j < rowLength; j++) {
-        for(key in matrix) {
-            if (matrix.hasOwnProperty(key)) {
-                if(!rowNodes[i]) {
-                    rowNodes[i] = [];
-                }
+    var newNode = null,
+        colNodes = [],
+        firstRowNode = null,
+        nodeItr = null;
+    i = 1;
+    for(key in matrix) {
+        if(matrix.hasOwnProperty(key)) {
+            for(j = 0; j < matrix[key].length; j++) {
                 if(matrix[key][j] !== "") {
-                    newNode = new Node(i+1, colHead);
-                    colHead.size++;
-                    rowNodes[i].push(newNode);
-                    nodeItr.down = newNode;
-                    newNode.up = nodeItr;
+                    newNode = new Node(i, headItr);
+                    if(!colNodes[j]) {
+                        colNodes[j] = [];
+                        firstRowNode = newNode;
+                    } else {
+                        newNode.left = nodeItr;
+                        nodeItr.right = newNode;
+                    }
                     nodeItr = newNode;
+                    colNodes[j].push(newNode);
                 }
-                i++;
+                headItr = headItr.right;
             }
         }
-        nodeItr.down = colHead;
-        colHead.up = nodeItr;
+        nodeItr.right = firsNode;
+        firstRowNode.left = nodeItr;
+        i++;
     }
 
-    //for(j = 0; j < matrix[0].length; j++) {
-    //    colHead = colHead.right;
-    //    nodeItr = colHead;
-    //    for(i = 0; i < matrix.length; i++) {
-    //        if(!rowNodes[i]) {
-    //            rowNodes[i] = [];
-    //        }
-    //        if(matrix[i][j] !== "") {
-    //            newNode = new Node(i+1, colHead);
-    //            colHead.size++;
-    //            rowNodes[i].push(newNode);
-    //            nodeItr.down = newNode;
-    //            newNode.up = nodeItr;
-    //            nodeItr = newNode;
-    //        }
-    //    }
-    //    nodeItr.down = colHead;
-    //    colHead.up = nodeItr;
-    //}
+    var colHead = this.head;
 
-    var nextNode = null;
-    for(i=0; i < rowNodes.length; i++) {
-        if(rowNodes[i].length === 0) {
+    for(i=0; i < colNodes.length; i++) {
+        colHead = colHead.right;
+        if(colNodes[i].length === 0) {
             continue;
         }
-        nodeItr = rowNodes[i][0];
-        for(j = 1; j < rowNodes[i].length; j++) {
-            nextNode = rowNodes[i][j];
-            nextNode.left = nodeItr;
-            nodeItr.right = nextNode;
+        nodeItr = colNodes[i][0];
+        for(j = 1; j < colNodes[i].length; j++) {
+            nextNode = colNodes[i][j];
+            nextNode.up = nodeItr;
+            nodeItr.down = nextNode;
             nodeItr = nextNode;
+            colHead.size++;
         }
-        nodeItr.right = rowNodes[i][0];
-        rowNodes[i][0].left = nodeItr;
+        colHead.up = nodeItr;
+        nodeItr.down = colHead;
     }
 };
 
