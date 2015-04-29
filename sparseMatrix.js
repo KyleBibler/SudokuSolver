@@ -46,28 +46,6 @@ var SparseMatrix = function() {
     this.head = new Head(0);
 };
 
-SparseMatrix.prototype.toString = function() {
-    var result = '',
-        header = this.head.right;
-        while(header !== this.head) {
-            result += '\t' + header.col + '\t';
-        }
-        result += '\n';
-        header = this.head.right;
-        var node = header.down;
-        while(node != header) {
-            result += node.left.col.col + '--';
-            if(node.left.right === node) {
-                result += '>';
-            }
-            result += 'N';
-            if(node.right.left === node) {
-                result += '<';
-            }
-            result += '--';
-        }
-};
-
 SparseMatrix.prototype.chooseCol = function() {
     var col = this.head.right,
         minSize = col.size+1,
@@ -94,13 +72,14 @@ SparseMatrix.prototype.createLinks = function(matrix) {
         }
     }
 
-    for(var i = 0; i < rowLength.length; i++) {
+    for(var i = 0; i < rowLength; i++) {
         newHead = new Head(i+1);
         headItr.right = newHead;
         newHead.left = headItr;
         headItr = newHead;
     }
-
+    headItr.right = this.head;
+    this.head.left = headItr;
 
     headItr = this.head.right;
 
@@ -108,6 +87,7 @@ SparseMatrix.prototype.createLinks = function(matrix) {
         colNodes = [],
         firstRowNode = null,
         nodeItr = null;
+        nodesInRow = 0;
     i = 1;
     for(key in matrix) {
         if(matrix.hasOwnProperty(key)) {
@@ -116,20 +96,29 @@ SparseMatrix.prototype.createLinks = function(matrix) {
                     newNode = new Node(i, headItr);
                     if(!colNodes[j]) {
                         colNodes[j] = [];
+                    }
+                    if(nodesInRow === 0) {
                         firstRowNode = newNode;
                     } else {
                         newNode.left = nodeItr;
                         nodeItr.right = newNode;
                     }
                     nodeItr = newNode;
+
                     colNodes[j].push(newNode);
+                    nodesInRow++;
                 }
                 headItr = headItr.right;
             }
+            if(nodesInRow > 0) {
+                nodeItr.right = firstRowNode;
+                firstRowNode.left = nodeItr;
+            }
+            nodesInRow = 0;
+            i++;
+            headItr = this.head.right;
         }
-        nodeItr.right = firsNode;
-        firstRowNode.left = nodeItr;
-        i++;
+
     }
 
     var colHead = this.head;
@@ -139,8 +128,8 @@ SparseMatrix.prototype.createLinks = function(matrix) {
         if(colNodes[i].length === 0) {
             continue;
         }
-        nodeItr = colNodes[i][0];
-        for(j = 1; j < colNodes[i].length; j++) {
+        nodeItr = colHead;
+        for(j = 0; j < colNodes[i].length; j++) {
             nextNode = colNodes[i][j];
             nextNode.up = nodeItr;
             nodeItr.down = nextNode;
