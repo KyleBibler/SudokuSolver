@@ -1,4 +1,5 @@
 var finalMatrix = null;
+var finalMatrixRows = [];
 
 //Generate solution matrix for sudoku
 function generateMatrix (n) {
@@ -53,6 +54,9 @@ function readFile(files) {
 		//DLX.matrix.createLinks(choiceMatrix);
 
 		finalMatrix = reduceMatrix(seedData, choiceMatrix);
+		for(var key in finalMatrix) {
+			finalMatrixRows.push(key);
+		}
 		DLX.matrix.createLinks(finalMatrix);
 	};
 
@@ -85,7 +89,7 @@ function parseInput(text) {
 				var number = numbers[n];
 
 				if (number !== '0') {
-					seedData.entries.push('R' + (rowNum) + 'C' + col + '#' + number);
+					seedData.entries.push(('R' + (rowNum) + 'C' + col + '#' + number).trim());
 				}
 				col++;
 			}
@@ -107,13 +111,14 @@ function reduceMatrix(seedData, choiceMatrix) {
 			number = tag.substring(tag.indexOf('#')+1),
 			box = seedData.n*Math.floor((Number(row)-1)/seedData.n) + Math.ceil(Number(column)/seedData.n);
 
+		console.log("DELETING TAG: " + tag);
 		delete choiceMatrix[tag];
 
 		//generate constraint tags from seed tags
-		constraintTags.push('R' + row + 'C' + column);
-		constraintTags.push('R' + row + '#' + number);
-		constraintTags.push('C' + column + '#' + number);
-		constraintTags.push('B' + box + '#' + number);		
+		constraintTags.push(('R' + row + 'C' + column).trim());
+		constraintTags.push(('R' + row + '#' + number).trim());
+		constraintTags.push(('C' + column + '#' + number).trim());
+		constraintTags.push(('B' + box + '#' + number).trim());
 	});
 
 	//remove generated tags from rows in choiceMatrix
@@ -124,7 +129,6 @@ function reduceMatrix(seedData, choiceMatrix) {
 
 		for (var i = 0; i < row.length; i++) {
 			var element = row[i];
-
 			constraintTags.forEach(function (tag) {
 				if (element === tag) {
 					row[i] = '';

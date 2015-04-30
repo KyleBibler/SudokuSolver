@@ -144,9 +144,14 @@ SparseMatrix.prototype.createLinks = function(matrix) {
     colHead = this.head.right;
     i = 1;
     while(colHead !== this.head) {
-        colHead.col = i;
+        if(colHead.size === 0) {
+            colHead.detach();
+        } else {
+            colHead.col = i;
+            i++;
+        }
         colHead = colHead.right;
-        i++;
+
     }
 };
 

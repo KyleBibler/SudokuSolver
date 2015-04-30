@@ -10,13 +10,11 @@
 <script src="dancingLinks.js"></script>
 <script>
     var mySmallerMatrix = {
-        "R1C1#1" : ['', 'THIS'],
-        "R1C1#2" : ['', 'THAT'],
-        "R1C2#1" : ['THIS', ''],
-        "R1C2#2" : ['', 'THIS'],
-        "R2C1#1" : ['', 'THIS'],
-        "R2C1#2" : ['THIS', 'THIS'],
-        "R2C2#2" : ['', 'THIS']
+        "R1C1#1" : ['','1', '', '', '1'],
+        "R1C1#2" : ['','', '1', '', '1'],
+        "R1C2#1" : ['1','1', '', '1', ''],
+        "R1C2#2" : ['1','1', '1', '1', '1'],
+        "R1C2#3" : ['1','', '1', '1', '']
     };
     DLX.matrix.createLinks(mySmallerMatrix);
 </script>
