@@ -1,6 +1,7 @@
 var finalMatrix = null;
 var finalMatrixRows = [];
 
+
 //Generate solution matrix for sudoku
 function generateMatrix (n) {
 	var nSq = Math.pow(n, 2),
@@ -44,19 +45,26 @@ function readFile(files) {
 	var f = files[0],
 		reader = new FileReader(),
 		seedData,
-		choiceMatrix;
+		choiceMatrix,
+		finalMatrix;
 
 	reader.readAsText(f);
 	reader.onloadend = function () {
 		seedData = parseInput(reader.result);
 
 		choiceMatrix = generateMatrix(seedData.n);
-		//DLX.matrix.createLinks(choiceMatrix);
 
 		finalMatrix = reduceMatrix(seedData, choiceMatrix);
+
 		for(var key in finalMatrix) {
 			finalMatrixRows.push(key);
 		}
+
+		console.log(seedData);
+		console.log(choiceMatrix);
+		console.log(finalMatrix);
+
+
 		DLX.matrix.createLinks(finalMatrix);
 	};
 
@@ -102,23 +110,35 @@ function parseInput(text) {
 }
 
 function reduceMatrix(seedData, choiceMatrix) {
-	var constraintTags = [];
-	console.log(choiceMatrix);
+	var constraintTags = [],
+		tagsToRemove = [];
+
+
 	//remove rows that match seed tags
 	seedData.entries.forEach(function (tag) {
 		var row = tag.substring(1, tag.indexOf('C')),
 			column = tag.substring(tag.indexOf('C')+1, tag.indexOf('#')),
 			number = tag.substring(tag.indexOf('#')+1),
-			box = seedData.n*Math.floor((Number(row)-1)/seedData.n) + Math.ceil(Number(column)/seedData.n);
+			box = seedData.n*Math.floor((Number(row)-1)/seedData.n) + Math.ceil(Number(column)/seedData.n),
+			deleteTag = tag.substring(0, tag.indexOf('#')).trim();
 
 		console.log("DELETING TAG: " + tag);
-		delete choiceMatrix[tag];
+		//delete choiceMatrix[tag];
+		//push tags to delete
+		for (var i=1; i <= Math.pow(seedData.n,2); i++) {
+			tagsToRemove.push((deleteTag + '#' + i).trim());
+		}
 
 		//generate constraint tags from seed tags
 		constraintTags.push(('R' + row + 'C' + column).trim());
 		constraintTags.push(('R' + row + '#' + number).trim());
 		constraintTags.push(('C' + column + '#' + number).trim());
 		constraintTags.push(('B' + box + '#' + number).trim());
+	});
+
+	//delete tags from choice matrix
+	tagsToRemove.forEach(function(tag) {
+		delete choiceMatrix[tag];
 	});
 
 	//remove generated tags from rows in choiceMatrix

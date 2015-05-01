@@ -59,17 +59,19 @@ var DLX = function() {
         solutionSet: [],
         setMatrix: function(matrix) { this.matrix = matrix },
         search: function(depth) {
-            if(depth > 10) {
-                return;
-            }
+            // if(depth > 10) {
+            //     return;
+            // }
             var matrixHead = this.matrix.head;
+            // if no columns
             if(matrixHead.right === matrixHead) {
                 //return this.solutionSet; //Return solution rows
                 var mySolution = [], i = 0;
                 for(i; i < depth; i++) {
                     mySolution[i] = this.solutionSet[i];
                 }
-                solutionSets[depth] = mySolution;
+                solutionSets.push(mySolution);
+                console.log(mySolution);
                 return;
             }
             var col = this.matrix.chooseCol(),

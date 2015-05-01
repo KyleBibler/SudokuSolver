@@ -93,7 +93,7 @@ SparseMatrix.prototype.createLinks = function(matrix) {
         if(matrix.hasOwnProperty(key)) {
             for(j = 0; j < matrix[key].length; j++) {
                 if(matrix[key][j] !== "") {
-                    newNode = new Node(i, headItr);
+                    newNode = new Node(key, headItr);
                     if(!colNodes[j]) {
                         colNodes[j] = [];
                     }
