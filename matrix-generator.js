@@ -80,8 +80,8 @@ function parseInput(text) {
 
 
 	for (var i = 0; i < rows.length; i++) {
-		var row = rows[i],
-			boxes = (row.trim() === '') ? [] : row.split('   '),
+		var row = rows[i].trim(),
+			boxes = (row === '') ? [] : row.split('   '),
 			rowNum = (boxes.length > 0) ? rowNum+1 : rowNum,
 			col = 1;
 
@@ -122,7 +122,6 @@ function reduceMatrix(seedData, choiceMatrix) {
 			box = seedData.n*Math.floor((Number(row)-1)/seedData.n) + Math.ceil(Number(column)/seedData.n),
 			deleteTag = tag.substring(0, tag.indexOf('#')).trim();
 
-		console.log("DELETING TAG: " + tag);
 		//delete choiceMatrix[tag];
 		//push tags to delete
 		for (var i=1; i <= Math.pow(seedData.n,2); i++) {

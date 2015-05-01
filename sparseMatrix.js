@@ -88,7 +88,6 @@ SparseMatrix.prototype.createLinks = function(matrix) {
         firstRowNode = null,
         nodeItr = null;
         nodesInRow = 0;
-    i = 1;
     for(key in matrix) {
         if(matrix.hasOwnProperty(key)) {
             for(j = 0; j < matrix[key].length; j++) {
@@ -115,7 +114,6 @@ SparseMatrix.prototype.createLinks = function(matrix) {
                 firstRowNode.left = nodeItr;
             }
             nodesInRow = 0;
-            i++;
             headItr = this.head.right;
         }
 
